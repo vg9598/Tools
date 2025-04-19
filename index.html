@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Online Password Generator & QR Code Creator - Create secure passwords and generate custom QR codes instantly">
+    <meta name="keywords" content="password generator, QR code creator, online security, tools, free tools">
+    <title>Secure Tools - Password Generator & QR Code Creator</title>
+    <link rel="canonical" href="https://yourdomain.com/tools">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f5f6fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        .tool-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .ad-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .ad-section {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <div class="tool-section">
+                <h1>Password Generator</h1>
+                <div class="input-group">
+                    <label for="length">Password Length:</label>
+                    <input type="number" id="length" min="8" max="50" value="12">
+                </div>
+                <div class="input-group">
+                    <label><input type="checkbox" id="uppercase"> Include Uppercase</label>
+                    <label><input type="checkbox" id="numbers"> Include Numbers</label>
+                    <label><input type="checkbox" id="symbols"> Include Symbols</label>
+                </div>
+                <button onclick="generatePassword()">Generate Password</button>
+                <div class="result" id="passwordResult"></div>
+                <button onclick="copyPassword()">Copy Password</button>
+            </div>
+
+            <div class="tool-section">
+                <h1>QR Code Generator</h1>
+                <div class="input-group">
+                    <label for="qrText">Enter Text/URL:</label>
+                    <input type="text" id="qrText" placeholder="https://example.com">
+                </div>
+                <div class="input-group">
+                    <label for="qrSize">Size:</label>
+                    <select id="qrSize">
+                        <option value="150">150x150</option>
+                        <option value="200">200x200</option>
+                        <option value="250">250x250</option>
+                    </select>
+                </div>
+                <button onclick="generateQR()">Generate QR Code</button>
+                <div id="qrcode"></div>
+            </div>
+        </main>
+
+        <aside class="ad-section">
+            <!-- Google AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </aside>
+    </div>
+
+    <script>
+        // Password Generator
+        function generatePassword() {
+            const length = document.getElementById('length').value;
+            const uppercase = document.getElementById('uppercase').checked;
+            const numbers = document.getElementById('numbers').checked;
+            const symbols = document.getElementById('symbols').checked;
+
+            let charset = 'abcdefghijklmnopqrstuvwxyz';
+            if (uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (numbers) charset += '0123456789';
+            if (symbols) charset += '!@#$%^&*()_+~`|}{[]\:;?><,./-=';
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+
+            document.getElementById('passwordResult').textContent = password;
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('passwordResult').textContent;
+            navigator.clipboard.writeText(password);
+        }
+
+        // QR Code Generator
+        function generateQR() {
+            const text = encodeURIComponent(document.getElementById('qrText').value);
+            const size = document.getElementById('qrSize').value;
+            const qrcodeDiv = document.getElementById('qrcode');
+            
+            qrcodeDiv.innerHTML = `
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${text}" 
+                     alt="Generated QR Code"
+                     loading="lazy"
+                     style="width: ${size}px; height: ${size}px;">
+                <br>
+                <a href="https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${text}" 
+                   download="qrcode.png">
+                    Download QR Code
+                </a>
+            `;
+        }
+    </script>
+
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+
+    <!-- SEO: Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Security Tools",
+        "description": "Online password generator and QR code creator",
+        "applicationCategory": "Utilities",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0"
+        }
+    }
+    </script>
+</body>
+</html>
